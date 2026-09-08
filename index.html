@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Manuel Tobón Bayona — Sistemas que convierten operaciones manuales en software que funciona solo. Consultoría técnica y desarrollo para empresas con procesos caros y repetitivos.">
+<meta name="author" content="Manuel Tobón Bayona">
+<title>Manuel Tobón — Sistemas que reemplazan trabajo manual</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #fafbfc;
+  --bg-gradient: radial-gradient(at 0% 0%, #f6f8fa 0%, transparent 60%);
+  --panel: #ffffff;
+  --panel-alt: #f8fafc;
+  --border: #e6e8eb;
+  --border-strong: #d0d7de;
+  --text: #1f2328;
+  --text-strong: #0d1117;
+  --muted: #59636e;
+  --muted-soft: #818b98;
+  --accent: #0969da;
+  --accent-hover: #0550ae;
+  --accent-soft: #ddf4ff;
+  --accent-border: #b6e3ff;
+  --code-bg: #f6f8fa;
+  --code-border: #e6e8eb;
+  --code-text: #1f2328;
+  --success: #1a7f37;
+  --success-bg: #dafbe1;
+  --warn: #9a6700;
+  --warn-bg: #fff8c5;
+  --info: #0969da;
+  --info-bg: #ddf4ff;
+  --danger: #cf222e;
+  --shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.04);
+  --shadow-md: 0 3px 8px rgba(31, 35, 40, 0.06);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --d-flow: #57606a;
+  --d-input: #6f42c1;
+  --d-system: #0969da;
+  --d-output: #1a7f37;
+  --d-actor: #8250df;
+}
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --bg-gradient: radial-gradient(at 0% 0%, #161b22 0%, transparent 60%);
+  --panel: #161b22;
+  --panel-alt: #1c2128;
+  --border: #30363d;
+  --border-strong: #484f58;
+  --text: #e6edf3;
+  --text-strong: #f0f6fc;
+  --muted: #8b949e;
+  --muted-soft: #6e7681;
+  --accent: #58a6ff;
+  --accent-hover: #79c0ff;
+  --accent-soft: #1f6feb33;
+  --accent-border: #1f6feb55;
+  --code-bg: #161b22;
+  --code-border: #30363d;
+  --code-text: #e6edf3;
+  --success: #3fb950;
+  --success-bg: #1f3a25;
+  --warn: #d29922;
+  --warn-bg: #3d2e0a;
+  --info: #58a6ff;
+  --info-bg: #0c2d6b;
+  --danger: #f85149;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+.theme-toggle:hover { border-color: var(--border-strong); background: var(--panel-alt); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .icon-moon { display: none; }
+[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+nav.top-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--border);
+  z-index: 50;
+  padding: 14px 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+[data-theme="dark"] nav.top-nav { background: rgba(13, 17, 23, 0.85); }
+nav.top-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+nav.top-nav .brand {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-strong);
+  letter-spacing: -0.01em;
+}
+nav.top-nav .brand .brand-mono {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  color: var(--accent);
+  margin-right: 6px;
+}
+nav.top-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+nav.top-nav ul li a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+nav.top-nav ul li a:hover { color: var(--text-strong); }
+.lang-switch {
+  display: inline-flex;
+  gap: 0;
+  margin-left: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.lang-switch a {
+  padding: 5px 10px;
+  text-decoration: none;
+  color: var(--muted);
+  background: var(--panel);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.lang-switch a:hover { color: var(--text-strong); }
+.lang-switch a.active {
+  background: var(--accent);
+  color: #ffffff;
+}
+.lang-switch a + a {
+  border-left: 1px solid var(--border);
+}
+.hero {
+  padding: 96px 0 64px;
+  text-align: left;
+}
+.hero .eyebrow {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 13px;
+  color: var(--success);
+  letter-spacing: 0.02em;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero .eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 4px var(--success-bg);
+}
+.hero h1 {
+  font-size: clamp(34px, 5.5vw, 54px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--text-strong);
+  margin-bottom: 24px;
+}
+.hero h1 .highlight {
+  background: linear-gradient(180deg, transparent 60%, var(--accent-soft) 60%);
+  padding: 0 2px;
+}
+.hero .lede {
+  font-size: 19px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 36px;
+  max-width: 720px;
+}
+.hero .meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+.hero .meta-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero .meta-row svg {
+  width: 14px;
+  height: 14px;
+  color: var(--muted-soft);
+}
+.hero .cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-secondary {
+  background: var(--panel);
+  color: var(--text-strong);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover { background: var(--panel-alt); border-color: var(--text-strong); }
+.btn svg { width: 14px; height: 14px; }
+section {
+  padding: 56px 0;
+  border-top: 1px solid var(--border);
+}
+.section-label {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label::before {
+  content: attr(data-num);
+  font-weight: 600;
+  color: var(--accent);
+}
+h2 {
+  font-size: clamp(26px, 3.5vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-strong);
+  margin-bottom: 16px;
+}
+h2 .sub {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: 0;
+}
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-strong);
+  margin-bottom: 8px;
+  margin-top: 24px;
+}
+p { margin-bottom: 16px; color: var(--text); }
+p.lead {
+  font-size: 17px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+ul.bullets {
+  list-style: none;
+  margin: 16px 0;
+}
+ul.bullets li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+ul.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+ul.bullets li strong { color: var(--text-strong); font-weight: 600; }
+.tesis-diagram {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px 20px;
+  margin: 28px 0;
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+.tesis-diagram svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.diagram-caption {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 14px;
+  font-style: italic;
+}
+.verticals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.vertical-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.vertical-card:hover {
+  border-color: var(--accent-border);
+  transform: translateY(-1px);
+}
+.vertical-card .vc-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.vertical-card .vc-icon svg { width: 16px; height: 16px; }
+.vertical-card h3 { margin-top: 0; font-size: 16px; }
+.vertical-card p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+.example-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: stretch;
+  margin: 24px 0;
+}
+.example-side {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  position: relative;
+}
+.example-side.before { border-left: 3px solid var(--warn); }
+.example-side.after { border-left: 3px solid var(--success); }
+.example-side .tag {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  background: var(--panel);
+  padding: 2px 8px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.example-side.before .tag { color: var(--warn); border-color: var(--warn); }
+.example-side.after .tag { color: var(--success); border-color: var(--success); }
+.example-arrow {
+  align-self: center;
+  color: var(--muted);
+  font-size: 22px;
+}
+.flow-list {
+  list-style: none;
+  margin-top: 12px;
+}
+.flow-list li {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 13px;
+  color: var(--text);
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.flow-list li:last-child { border-bottom: none; }
+.flow-list li .arrow { color: var(--muted); margin: 0 6px; }
+@media (max-width: 720px) {
+  .example-pair { grid-template-columns: 1fr; }
+  .example-arrow { text-align: center; transform: rotate(90deg); }
+}
+.expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.expertise-card {
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+}
+.expertise-card .ec-label {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+.expertise-card h3 { margin: 0 0 10px; font-size: 15px; }
+.expertise-card ul {
+  list-style: none;
+  font-size: 13px;
+  color: var(--muted);
+}
+.expertise-card ul li {
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.expertise-card ul li::before {
+  content: "›";
+  color: var(--accent);
+  font-weight: bold;
+}
+.callout {
+  background: var(--info-bg);
+  border: 1px solid var(--accent-border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin: 24px 0;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.callout.tip { background: var(--info-bg); border-color: var(--accent-border); border-left-color: var(--accent); }
+.callout.ok { background: var(--success-bg); border-color: var(--success); border-left-color: var(--success); }
+.callout.warn { background: var(--warn-bg); border-color: var(--warn); border-left-color: var(--warn); }
+.callout-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.callout.tip .callout-icon { color: var(--accent); }
+.callout.ok .callout-icon { color: var(--success); }
+.callout.warn .callout-icon { color: var(--warn); }
+.callout-body { font-size: 14px; color: var(--text); }
+.callout-body strong { color: var(--text-strong); display: block; margin-bottom: 4px; font-weight: 600; }
+.callout-body p:last-child { margin-bottom: 0; }
+code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 0.88em;
+  padding: 2px 6px;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-sm);
+  color: var(--code-text);
+}
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.process-step {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  position: relative;
+}
+.process-step .step-num {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.process-step h3 { margin: 0 0 6px; font-size: 15px; }
+.process-step p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.45;
+}
+.outcomes-list {
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+}
+.outcomes-list li {
+  padding: 14px 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.outcomes-list li .check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--success-bg);
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+.outcomes-list li .check svg { width: 11px; height: 11px; }
+.outcomes-list li strong { color: var(--text-strong); display: block; margin-bottom: 2px; }
+.outcomes-list li span { font-size: 14px; color: var(--muted); }
+.engagement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+.engagement-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+}
+.engagement-card h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--accent);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.01em;
+}
+.engagement-card p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+.services {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+.service {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  transition: border-color 0.15s ease;
+}
+.service:hover {
+  border-color: var(--accent-border);
+}
+.service-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.service-tag {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.service-head h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-strong);
+}
+.service-price {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  color: var(--success);
+  background: var(--success-bg);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.service-gancho {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding: 8px 14px;
+  margin: 12px 0 18px;
+  background: var(--panel-alt);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.service-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+.service-block .service-label {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.service-block p {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.55;
+}
+.service-note {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--panel-alt);
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  line-height: 1.5;
+}
+.service-note strong { color: var(--text-strong); font-weight: 600; }
+.pricing-disclaimer {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: var(--info-bg);
+  border: 1px solid var(--accent-border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.55;
+}
+.pricing-disclaimer strong { color: var(--text-strong); font-weight: 600; display: block; margin-bottom: 4px; }
+.profile {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin: 28px 0;
+  box-shadow: var(--shadow-sm);
+}
+.profile-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.profile-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.profile-role {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+.profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.profile-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.profile-meta svg { width: 13px; height: 13px; }
+.profile-section { margin-bottom: 24px; }
+.profile-section:last-child { margin-bottom: 0; }
+.profile-section h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.profile-section ul {
+  list-style: none;
+  font-size: 14px;
+}
+.profile-section ul li {
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.profile-section ul li:last-child { border-bottom: none; }
+.profile-section ul li::before {
+  content: "✓";
+  color: var(--success);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.profile-section ul li strong { color: var(--text-strong); font-weight: 600; }
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag-list span {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  padding: 4px 10px;
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+}
+.experience-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.experience-item:last-child { border-bottom: none; }
+.experience-item .exp-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.experience-item .exp-title {
+  font-weight: 600;
+  color: var(--text-strong);
+  font-size: 15px;
+}
+.experience-item .exp-date {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+.experience-item .exp-org {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.experience-item ul {
+  list-style: none;
+  font-size: 13px;
+  color: var(--text);
+}
+.experience-item ul li {
+  padding: 3px 0;
+  padding-left: 14px;
+  position: relative;
+}
+.experience-item ul li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+.final-cta {
+  text-align: center;
+  padding: 80px 0 100px;
+  border-top: 1px solid var(--border);
+}
+.final-cta h2 { margin-bottom: 20px; }
+.final-cta p {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+.quote {
+  font-size: 18px;
+  font-style: italic;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding: 8px 20px;
+  margin: 24px 0;
+  background: var(--panel-alt);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.quote strong { color: var(--text-strong); font-weight: 600; font-style: normal; }
+footer {
+  padding: 32px 0 40px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+.contact-form {
+  max-width: 540px;
+  margin: 32px auto 0;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+}
+.contact-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.contact-form .field {
+  margin-bottom: 12px;
+}
+.contact-form label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.02em;
+}
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.15s ease;
+}
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.contact-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.contact-form .form-submit {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+@media (max-width: 640px) {
+  .contact-form .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .hero { padding: 60px 0 40px; }
+  section { padding: 40px 0; }
+  nav.top-nav ul { gap: 16px; font-size: 13px; }
+  .profile { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mono">~/</span>Manuel Tobón</div>
+    <ul>
+      <li><a href="#enfoque">Enfoque</a></li>
+      <li><a href="#verticales">Verticales</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#perfil">Perfil</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+      <li>
+        <div class="lang-switch" aria-label="Idioma">
+          <a href="index.html" class="active">ES</a>
+          <a href="index-en.html">EN</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<div class="container">
+
+<header class="hero">
+  <div class="eyebrow">disponible para nuevos proyectos</div>
+  <h1>
+    Convierto operaciones manuales en<br>
+    <span class="highlight">sistemas que funcionan solos</span>.
+  </h1>
+  <p class="lede">
+    Soy ingeniero de software senior con 7+ años construyendo backends, arquitecturas distribuidas y sistemas orientados a datos en JPMorgan Chase. Hoy trabajo con empresas que todavía dependen de Excel + WhatsApp + correos + trabajo manual — y convierto esos procesos en software que opera sin intervención humana.
+  </p>
+  <div class="meta-row">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Buenos Aires, Argentina
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Respuesta en menos de 24h
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+      Trabajo remoto · LATAM y US time zones
+    </span>
+  </div>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="#contacto">
+      Conversemos sobre tu proceso
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a class="btn btn-secondary" href="https://www.linkedin.com/in/manuel-andres-tobon-bayona-een/" target="_blank" rel="noopener">
+      LinkedIn
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+    </a>
+  </div>
+</header>
+
+<section id="enfoque">
+  <div class="section-label" data-num="01">El enfoque</div>
+  <h2>Una capa delgada de software sobre lo que la empresa ya tiene.
+    <span class="sub">No se trata de reemplazar personas. Se trata de quitarles el trabajo que una máquina puede hacer mejor.</span>
+  </h2>
+  <p class="lead">
+    La nueva generación de software empresarial no necesariamente es una aplicación enorme. Puede ser una capa pequeña de inteligencia y automatización que se conecta a los sistemas, documentos y procesos que la empresa ya tiene funcionando.
+  </p>
+
+  <div class="tesis-diagram">
+    <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de arquitectura: la empresa con sus sistemas actuales y una capa de automatización que se conecta">
+      <defs>
+        <marker id="arrow-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--d-flow)"/>
+        </marker>
+        <marker id="arrow-system" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--d-system)"/>
+        </marker>
+      </defs>
+
+      <rect x="40" y="30" width="260" height="300" rx="12" fill="none" stroke="var(--border-strong)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="170" y="55" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace" font-size="11" fill="var(--muted)" letter-spacing="0.06em">LO QUE YA TIENES</text>
+
+      <g font-family="-apple-system, BlinkMacSystemFont, sans-serif">
+        <rect x="65" y="80" width="210" height="38" rx="8" fill="var(--panel)" stroke="var(--d-input)" stroke-width="1.5"/>
+        <text x="170" y="103" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-strong)">ERP</text>
+
+        <rect x="65" y="128" width="210" height="38" rx="8" fill="var(--panel)" stroke="var(--d-input)" stroke-width="1.5"/>
+        <text x="170" y="151" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-strong)">Excel · hojas de cálculo</text>
+
+        <rect x="65" y="176" width="210" height="38" rx="8" fill="var(--panel)" stroke="var(--d-input)" stroke-width="1.5"/>
+        <text x="170" y="199" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-strong)">WhatsApp · correo</text>
+
+        <rect x="65" y="224" width="210" height="38" rx="8" fill="var(--panel)" stroke="var(--d-input)" stroke-width="1.5"/>
+        <text x="170" y="247" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-strong)">APIs · integraciones</text>
+
+        <rect x="65" y="272" width="210" height="38" rx="8" fill="var(--panel)" stroke="var(--d-input)" stroke-width="1.5"/>
+        <text x="170" y="295" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-strong)">Documentos · bases de datos</text>
+      </g>
+
+      <rect x="380" y="80" width="330" height="110" rx="12" fill="var(--accent-soft)" stroke="var(--d-system)" stroke-width="2"/>
+      <text x="545" y="110" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="700" fill="var(--accent)">Automation + Data + AI</text>
+      <text x="545" y="135" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" fill="var(--text)" font-style="italic">Capa delgada de software</text>
+      <text x="545" y="158" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" fill="var(--muted)">interpreta · conecta · ejecuta</text>
+      <text x="545" y="178" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" fill="var(--muted)">lo que la empresa ya tiene</text>
+
+      <rect x="380" y="230" width="330" height="100" rx="12" fill="var(--panel)" stroke="var(--d-output)" stroke-width="1.5"/>
+      <text x="545" y="256" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace" font-size="11" fill="var(--muted)" letter-spacing="0.06em">RESULTADO</text>
+      <text x="545" y="280" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="600" fill="var(--text-strong)">↓ Menos trabajo · menos errores</text>
+      <text x="545" y="302" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="600" fill="var(--text-strong)">↓ Más velocidad · más información</text>
+      <text x="545" y="324" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" fill="var(--muted)" font-style="italic">personas enfocadas en lo importante</text>
+
+      <path d="M 275 99 Q 330 99 380 120" stroke="var(--d-flow)" stroke-width="1.5" fill="none" marker-end="url(#arrow-flow)"/>
+      <path d="M 275 147 Q 330 147 380 140" stroke="var(--d-flow)" stroke-width="1.5" fill="none" marker-end="url(#arrow-flow)"/>
+      <path d="M 275 195 Q 330 195 380 160" stroke="var(--d-flow)" stroke-width="1.5" fill="none" marker-end="url(#arrow-flow)"/>
+      <path d="M 275 243 Q 330 220 380 180" stroke="var(--d-flow)" stroke-width="1.5" fill="none" marker-end="url(#arrow-flow)"/>
+      <path d="M 275 291 Q 330 280 380 185" stroke="var(--d-flow)" stroke-width="1.5" fill="none" marker-end="url(#arrow-flow)"/>
+
+      <path d="M 545 190 L 545 228" stroke="var(--d-output)" stroke-width="2" fill="none" marker-end="url(#arrow-system)"/>
+    </svg>
+  </div>
+  <p class="diagram-caption">La empresa sigue funcionando con sus sistemas. Encima se agrega una capa que automatiza lo repetitivo.</p>
+
+  <div class="callout tip">
+    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <div class="callout-body">
+      <strong>Lo que no hago.</strong>
+      No vendo "AI" como etiqueta. No entrego chatbots genéricos. No reemplazo tu stack. Cada sistema que construyo empieza por entender un proceso específico y termina midiendo una mejora operativa concreta.
+    </div>
+  </div>
+</section>
+
+<section id="verticales">
+  <div class="section-label" data-num="02">Dónde trabajo</div>
+  <h2>Cuatro verticales donde el problema es más claro.
+    <span class="sub">Empresas cuya operación todavía depende mucho de información dispersa y trabajo manual.</span>
+  </h2>
+
+  <div class="verticals-grid">
+    <div class="vertical-card">
+      <div class="vc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      </div>
+      <h3>Importadores y autopartes</h3>
+      <p>Cotizaciones, proveedores, inventario, búsqueda de referencias, pedidos y seguimiento. Información fragmentada entre WhatsApp, Excel y proveedores.</p>
+    </div>
+    <div class="vertical-card">
+      <div class="vc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <h3>Logística y operaciones</h3>
+      <p>Procesos, estados, documentos, excepciones y reportes. Cada paso depende de alguien que pasa información al siguiente eslabón.</p>
+    </div>
+    <div class="vertical-card">
+      <div class="vc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <h3>Servicios profesionales</h3>
+      <p>Entregables, documentos, vencimientos, revisiones, seguimiento y generación de información. Cada cliente es un mini-proyecto manual.</p>
+    </div>
+    <div class="vertical-card">
+      <div class="vc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+      </div>
+      <h3>Empresas con datos fragmentados</h3>
+      <p>Conectar fuentes — ERP, CRM, hojas de cálculo, APIs, bases de datos internas — y convertirlas en una herramienta real para operar.</p>
+    </div>
+  </div>
+</section>
+
+<section id="ejemplo">
+  <div class="section-label" data-num="03">Un ejemplo</div>
+  <h2>Una solicitud de autoparte, antes y después.
+    <span class="sub">Eso no es un chatbot. Es una parte del negocio convertida en software.</span>
+  </h2>
+
+  <div class="example-pair">
+    <div class="example-side before">
+      <div class="tag">Hoy</div>
+      <ul class="flow-list">
+        <li>WhatsApp</li>
+        <li><span class="arrow">↓</span> Empleado recibe el pedido</li>
+        <li><span class="arrow">↓</span> Busca la referencia</li>
+        <li><span class="arrow">↓</span> Consulta el Excel interno</li>
+        <li><span class="arrow">↓</span> Pregunta a un proveedor</li>
+        <li><span class="arrow">↓</span> Calcula precio manualmente</li>
+        <li><span class="arrow">↓</span> Responde al cliente</li>
+      </ul>
+      <p style="margin-top:14px;font-size:13px;color:var(--muted);margin-bottom:0;">Horas de ida y vuelta. Errores. Clientes que se van.</p>
+    </div>
+    <div class="example-arrow">→</div>
+    <div class="example-side after">
+      <div class="tag">Con sistema</div>
+      <ul class="flow-list">
+        <li>Solicitud estructurada</li>
+        <li><span class="arrow">↓</span> Sistema interpreta</li>
+        <li><span class="arrow">↓</span> Consulta catálogo</li>
+        <li><span class="arrow">↓</span> Consulta inventario</li>
+        <li><span class="arrow">↓</span> Consulta proveedores</li>
+        <li><span class="arrow">↓</span> Calcula alternativas</li>
+        <li><span class="arrow">↓</span> Genera respuesta</li>
+        <li><span class="arrow">↓</span> Registra la operación</li>
+      </ul>
+      <p style="margin-top:14px;font-size:13px;color:var(--muted);margin-bottom:0;">Segundos. Trazabilidad. La persona decide, no ejecuta.</p>
+    </div>
+  </div>
+</section>
+
+<section id="expertise">
+  <div class="section-label" data-num="04">Stack</div>
+  <h2>Lo que sé construir.
+    <span class="sub">La tecnología es el medio. El producto es el resultado operativo para el cliente.</span>
+  </h2>
+  <p class="lead">Tengo la experiencia técnica para construir la infraestructura detrás de estas soluciones:</p>
+
+  <div class="expertise-grid">
+    <div class="expertise-card">
+      <div class="ec-label">backend</div>
+      <h3>Servicios distribuidos</h3>
+      <ul>
+        <li>Python · Java</li>
+        <li>APIs REST · gRPC</li>
+        <li>Spring Boot · FastAPI</li>
+        <li>Arquitecturas reactivas</li>
+      </ul>
+    </div>
+    <div class="expertise-card">
+      <div class="ec-label">data</div>
+      <h3>Pipelines y procesamiento</h3>
+      <ul>
+        <li>PySpark · Airflow</li>
+        <li>Batch + real-time</li>
+        <li>Bases de datos relacionales</li>
+        <li>Analytics y reporting</li>
+      </ul>
+    </div>
+    <div class="expertise-card">
+      <div class="ec-label">arquitectura</div>
+      <h3>Sistemas escalables</h3>
+      <ul>
+        <li>Event-driven · Kafka</li>
+        <li>Domain-Driven Design</li>
+        <li>Integración de sistemas</li>
+        <li>Resiliencia y tolerancia a fallos</li>
+      </ul>
+    </div>
+    <div class="expertise-card">
+      <div class="ec-label">ai</div>
+      <h3>Agentes y herramientas</h3>
+      <ul>
+        <li>LLMs · RAG</li>
+        <li>Spring AI · LangGraph</li>
+        <li>Agentes y workflows</li>
+        <li>Human-in-the-loop</li>
+      </ul>
+    </div>
+    <div class="expertise-card">
+      <div class="ec-label">infraestructura</div>
+      <h3>Despliegues reproducibles</h3>
+      <ul>
+        <li>Docker · Kubernetes</li>
+        <li>AWS · Terraform</li>
+        <li>CI/CD · Linux</li>
+        <li>Observabilidad</li>
+      </ul>
+    </div>
+    <div class="expertise-card">
+      <div class="ec-label">finanzas</div>
+      <h3>Sistemas financieros</h3>
+      <ul>
+        <li>CAPM · GARCH</li>
+        <li>Monte Carlo · VaR / CVaR</li>
+        <li>Reportes regulatorios</li>
+        <li>Basel III · riesgo</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="servicios">
+  <div class="section-label" data-num="05">Servicios · cómo trabajo</div>
+  <h2>Ciclos cortos. Evidencia antes que escala.
+    <span class="sub">Cada engagement termina con un sistema funcionando y números para mostrar.</span>
+  </h2>
+
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <h3>Diagnóstico</h3>
+      <p>Una o dos sesiones para mapear el proceso actual, dónde se pierde tiempo y qué se puede automatizar.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <h3>Diseño</h3>
+      <p>Propuesta concreta: qué se construye, qué se mide, en cuánto tiempo. Antes de escribir una línea de código.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <h3>Construcción</h3>
+      <p>Desarrollo iterativo con demos semanales. Tu equipo ve el sistema crecer y puede corregir el rumbo.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <h3>Implementación</h3>
+      <p>Puesta en producción con tus datos reales, integrado a tus sistemas, con monitoreo desde el día uno.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">05</div>
+      <h3>Medición</h3>
+      <p>Tiempo ahorrado, errores eliminados, velocidad ganada. Números concretos, no percepciones.</p>
+    </div>
+  </div>
+
+  <h3>Qué tipo de resultados esperar</h3>
+  <ul class="outcomes-list">
+    <li>
+      <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+      <div>
+        <strong>Tiempo ahorrado medible.</strong>
+        <span>Horas-hombre que el equipo deja de gastar en tareas mecánicas, registradas antes y después.</span>
+      </div>
+    </li>
+    <li>
+      <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+      <div>
+        <strong>Errores que desaparecen.</strong>
+        <span>Información que ya no se transcribe a mano entre WhatsApp, Excel y el ERP — y por lo tanto ya no se pierde ni se equivoca.</span>
+      </div>
+    </li>
+    <li>
+      <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+      <div>
+        <strong>Información que antes no existía.</strong>
+        <span>Reportes, métricas y trazabilidad que salen del mismo sistema que ejecuta — no de un Excel paralelo.</span>
+      </div>
+    </li>
+    <li>
+      <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+      <div>
+        <strong>Personas reasignadas a trabajo de valor.</strong>
+        <span>El equipo deja de ejecutar tareas repetitivas y pasa a atender clientes, tomar decisiones y resolver excepciones.</span>
+      </div>
+    </li>
+  </ul>
+
+  <h3>Tres formas concretas de empezar</h3>
+  <p class="lead" style="margin-bottom:8px;">Estos son los engagements que más repetidamente termino cerrando. Cada uno tiene un ciclo de venta corto y un resultado medible desde la primera entrega.</p>
+
+  <div class="services">
+
+    <div class="service">
+      <div class="service-head">
+        <div>
+          <div class="service-tag">01 · staff augmentation</div>
+          <h3>Ingenieros senior integrados a tu equipo</h3>
+        </div>
+        <div class="service-price">USD 45–60/h · desde 5 días</div>
+      </div>
+      <p class="service-gancho">"Ingenieros senior integrados a tu equipo en tu misma zona horaria en menos de 5 días, sin costos de contratación local ni cargas prestacionales."</p>
+      <div class="service-detail">
+        <div class="service-block">
+          <div class="service-label">qué hago</div>
+          <p>Me sumo a tu equipo como backend senior / data engineer / arquitecto. Mismo horario, mismo stack, mismo git. Empiezo a entregar código revisable desde el primer sprint.</p>
+        </div>
+        <div class="service-block">
+          <div class="service-label">cuándo tiene sentido</div>
+          <p>El cliente ya sabe qué necesita (ej. dos ingenieros backend y un arquitecto de datos) y ya tiene la partida presupuestal aprobada. Mi trabajo no es vender el "qué" — es ofrecer rapidez de contratación, calidad técnica e integración inmediata.</p>
+        </div>
+        <div class="service-block">
+          <div class="service-label">dónde fricciona menos</div>
+          <p>Mercados saturados o con escasez de talento local: EE. UU., Canadá, Europa.</p>
+        </div>
+      </div>
+      <div class="service-note"><strong>tarifa:</strong> USD 45–60/h según seniority exacta y stack. Contrato mínimo 1 mes, facturación mensual. Sin costos de contratación local ni cargas prestacionales — solo honorarios profesionales.</div>
+    </div>
+
+    <div class="service">
+      <div class="service-head">
+        <div>
+          <div class="service-tag">02 · auditoría técnica</div>
+          <h3>Diagnóstico fijo de seguridad, rendimiento o arquitectura</h3>
+        </div>
+        <div class="service-price">USD 2.500–4.500 fijo · 5 días</div>
+      </div>
+      <p class="service-gancho">"Auditamos la seguridad y velocidad de tu arquitectura actual en 5 días y te entregamos un reporte ejecutable de vulnerabilidades y cuellos de botella."</p>
+      <div class="service-detail">
+        <div class="service-block">
+          <div class="service-label">qué hago</div>
+          <p>Auditoría de rendimiento, seguridad o arquitectura de datos. Reporte priorizado con vulnerabilidades, cuellos de botella y plan de remediación accionable.</p>
+        </div>
+        <div class="service-block">
+          <div class="service-label">qué incluye el reporte</div>
+          <p>Diagnóstico de los problemas más urgentes, plan priorizado para arreglarlos, estimaciones de esfuerzo y riesgo. Lo podés ejecutar internamente o pedirnos ayuda para implementarlo.</p>
+        </div>
+        <div class="service-block">
+          <div class="service-label">dónde fricciona menos</div>
+          <p>Cualquier empresa con sistemas en producción que ya generan dolor — pero aún no tiene claro qué arreglar primero.</p>
+        </div>
+      </div>
+      <div class="service-note"><strong>tarifa:</strong> USD 2.500–4.500 fijo según alcance (seguridad, rendimiento, datos, full-stack). Pago 50% al inicio, 50% a la entrega del reporte. El reporte es tuyo y lo podés usar internamente sin restricciones.</div>
+    </div>
+
+    <div class="service">
+      <div class="service-head">
+        <div>
+          <div class="service-tag">03 · automatización con ROI</div>
+          <h3>Reemplazo de trabajo manual por sistemas que funcionan solos</h3>
+        </div>
+        <div class="service-price">USD 8.000–25.000/proyecto · ROI medible</div>
+      </div>
+      <p class="service-gancho">"Automatizamos la extracción de datos y conciliación de tus sistemas para ahorrarle a tu equipo 15 horas de trabajo manual a la semana."</p>
+      <div class="service-detail">
+        <div class="service-block">
+          <div class="service-label">qué hago</div>
+          <p>RPA, integración de APIs, agentes de IA. Reemplazo de tareas manuales repetitivas por flujos automáticos. Medición antes/después del tiempo ahorrado.</p>
+        </div>
+        <div class="service-block">
+          <div class="service-label">por qué cierra rápido</div>
+          <p>El ROI es visual e inmediato. El cliente ve cómo tareas que hoy ocupan personas se ejecutan solas, con menos errores y en menos tiempo.</p>
+        </div>
+        <div class="service-block">
+          <div class="service-label">dónde fricciona menos</div>
+          <p>Empresas donde el cuello de botella operativo está claro y medible — extracción de datos, conciliación, seguimiento, generación de reportes.</p>
+        </div>
+      </div>
+      <div class="service-note"><strong>tarifa:</strong> USD 8.000–25.000 por proyecto según complejidad. 30% al inicio, 40% al primer demo funcional, 30% a la entrega en producción. El ROI se mide antes y después — si no se cumple, no se factura el último tramo.</div>
+    </div>
+
+  </div>
+
+  <div class="pricing-disclaimer">
+    <strong>Cómo se definen las tarifas finales.</strong>
+    Cada engagement arranca con un diagnóstico de 30 minutos sin costo. Después de eso envío una propuesta cerrada con alcance, plazo y tarifa exacta. Lo que ves arriba son los rangos típicos — no son cotizaciones automáticas. Las tarifas se ajustan según el contexto real del proyecto.
+  </div>
+
+  <div class="quote">
+    No estoy apostando a que <em>"la IA va a cambiarlo todo"</em> — eso ya no es una apuesta.<br>
+    Lo que estoy apostando es más simple: <strong>las empresas van a necesitar convertir sus procesos en sistemas</strong>. Y alguien tiene que construir esos sistemas.
+  </div>
+</section>
+
+<section id="perfil">
+  <div class="section-label" data-num="06">Sobre mí</div>
+  <h2>El perfil detrás del trabajo.
+    <span class="sub">Senior Backend Engineer · Distributed Systems · Quant Finance · AI Engineering</span>
+  </h2>
+
+  <div class="profile">
+    <div class="profile-header">
+      <div>
+        <div class="profile-name">Manuel Andrés Tobón Bayona</div>
+        <div class="profile-role">Senior Backend Engineer</div>
+        <div class="profile-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Buenos Aires, Argentina</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>manuelpope@gmail.com</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Remote-first · async-friendly</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>English C1 · EF SET</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h4>Highlights</h4>
+      <ul>
+        <li><strong>7+ años en JPMorgan Chase</strong> — top contributor y arquitecto de microservicios financieros críticos con 99.9% uptime</li>
+        <li><strong>Sistemas event-driven Kafka</strong> — millones de eventos diarios, 99.9% uptime, observabilidad de punta</li>
+        <li><strong>Modernización monolith → microservices</strong> con Domain-Driven Design — reducción de latencia del 80%</li>
+        <li><strong>Observability Lead (5+ años)</strong> — Grafana, Prometheus, Splunk, Datadog — definición de SLIs/SLOs</li>
+        <li><strong>API Design Expert (5+ años)</strong> — OpenAPI, OAuth2, JWT, versioning — contratos enterprise-grade</li>
+        <li><strong>Quant finance</strong> — CAPM, GARCH, Monte Carlo, VaR/CVaR, Basel III</li>
+        <li><strong>AI Engineering</strong> — Spring AI, LangGraph, RAG, ChromaDB — construyendo agentes financieros</li>
+        <li><strong>Mentoría técnica</strong> — cada ingeniero que entró al equipo, sin importar seniority</li>
+      </ul>
+    </div>
+
+    <div class="profile-section">
+      <h4>Core expertise</h4>
+      <div class="tag-list">
+        <span>Distributed Systems</span>
+        <span>Event-Driven</span>
+        <span>Spring WebFlux</span>
+        <span>Java · Spring Boot</span>
+        <span>Python · FastAPI</span>
+        <span>REST · gRPC</span>
+        <span>OpenAPI · OAuth2/JWT</span>
+        <span>AWS · Kubernetes</span>
+        <span>Terraform · CI/CD</span>
+        <span>PySpark · Airflow</span>
+        <span>DDD · CQRS</span>
+        <span>Clean Architecture</span>
+        <span>CAPM · GARCH</span>
+        <span>Monte Carlo · VaR</span>
+        <span>Spring AI · LangGraph</span>
+        <span>RAG · ChromaDB</span>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h4>Experiencia profesional</h4>
+
+      <div class="experience-item">
+        <div class="exp-header">
+          <div class="exp-title">Senior Associate Software Engineer</div>
+          <div class="exp-date">Aug 2022 – Dec 2025</div>
+        </div>
+        <div class="exp-org">JPMorgan Chase & Co. — Buenos Aires, Argentina</div>
+        <ul>
+          <li>Senior engineer y tech lead en iniciativas estratégicas para financial reporting, risk management y plataformas enterprise</li>
+          <li>Diseño e implementación de servicios backend altamente disponibles para procesos bancarios críticos</li>
+          <li>Transformación de workflows legacy en plataformas microservice-based — service decomposition, API design, domain modeling, event modeling</li>
+          <li>Lead developer en data pipelines con Kafka, PySpark y Airflow — 10M+ registros/día</li>
+          <li>Sistemas de reportes regulatorios Basel III — accuracy, traceability y auditability mandatory</li>
+          <li>Estándares de observabilidad: métricas, alerting, dashboards, SLIs/SLOs y diagnóstico de incidentes</li>
+        </ul>
+      </div>
+
+      <div class="experience-item">
+        <div class="exp-header">
+          <div class="exp-title">Software Engineer → Associate Software Engineer</div>
+          <div class="exp-date">Jul 2018 – Mar 2021</div>
+        </div>
+        <div class="exp-org">JPMorgan Chase & Co. — Buenos Aires, Argentina</div>
+        <ul>
+          <li>Backend para sistemas de trading FXO, Derivatives, OTC, F&amp;O y financial reporting enterprise</li>
+          <li>Modernización de sistemas legacy y optimización de performance</li>
+          <li>CI/CD e infraestructura en ambientes financieros altamente regulados</li>
+          <li>Primera contratación LATAM del equipo de trading infrastructure — estableció el proceso de onboarding para futuros engineers LATAM</li>
+        </ul>
+      </div>
+
+      <div class="experience-item">
+        <div class="exp-header">
+          <div class="exp-title">Full Stack Engineer — Independent Contractor</div>
+          <div class="exp-date">May 2021 – Sep 2021</div>
+        </div>
+        <div class="exp-org">Remote — International Clients</div>
+        <ul>
+          <li>Soluciones custom para clientes internacionales en múltiples industrias</li>
+          <li>Integración de modelos ML (TensorFlow, Scikit-learn) para predictive analytics — mejora de decisión del 30%</li>
+          <li>Soluciones cloud-native en AWS — reducción de costos de infraestructura del 40%</li>
+        </ul>
+      </div>
+
+      <div class="experience-item">
+        <div class="exp-header">
+          <div class="exp-title">Financial AI Products — Founder &amp; Independent Builder</div>
+          <div class="exp-date">Jan 2026 – Present</div>
+        </div>
+        <div class="exp-org">Independent Builder — Buenos Aires, Argentina</div>
+        <ul>
+          <li>Agentes de financial advisor y motores de análisis cuantitativo con LangGraph y Spring AI</li>
+          <li>Pipelines automatizados para CAPM, GARCH, Monte Carlo, VaR, CVaR, Beta y métricas de riesgo</li>
+          <li>Workflows human-in-the-loop y sistemas RAG para soporte de decisiones financieras reguladas</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h4>Educación</h4>
+      <ul>
+        <li><strong>M.Eng. Computational Engineering &amp; Mathematics</strong> — Rovira i Virgili University (2020–2025, coursework completed)</li>
+        <li><strong>B.Sc. Electronic Engineering</strong> — Pontifical Xavierian University, Bogotá, Colombia (2011–2016)</li>
+      </ul>
+    </div>
+
+    <div class="profile-section">
+      <h4>Certificaciones</h4>
+      <ul>
+        <li>Spring AI for Beginners — Udemy, March 2026</li>
+        <li>Build GenAI LLM Apps — Udemy, March 2026</li>
+        <li>Claude Code: AI Agents — Platzi, March 2026</li>
+        <li>Human-in-Loop AI Workflows — Platzi, March 2026</li>
+        <li>Master Python Microservices — Udemy, July 2025</li>
+        <li>Applied Software Architecture &amp; DDD Patterns — Platzi, March 2026</li>
+        <li>Risk Management — Columbia University, 2020</li>
+        <li>English Proficiency C1 — EF SET, 2021</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta" id="contacto">
+  <div class="section-label" data-num="07">Siguiente paso</div>
+  <h2>¿Tenés un proceso que ya debería ser software?</h2>
+  <p>Si hoy depende de Excel + WhatsApp + personas haciendo trabajo mecánico, probablemente hay una versión de eso funcionando sola. Conversemos 30 minutos para ver si tiene sentido trabajar juntos.</p>
+
+  <form class="contact-form" action="mailto:manuelpope@gmail.com" method="post" enctype="text/plain">
+    <div class="form-row">
+      <div class="field">
+        <label for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
+      </div>
+      <div class="field">
+        <label for="empresa">Empresa</label>
+        <input type="text" id="empresa" name="empresa" required>
+      </div>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="field">
+      <label for="tipo">Qué te interesa</label>
+      <select id="tipo" name="tipo">
+        <option>Staff augmentation — sumar un senior a tu equipo</option>
+        <option>Auditoría técnica — seguridad / rendimiento / arquitectura</option>
+        <option>Automatización con ROI medible</option>
+        <option>Diagnóstico de un proceso específico</option>
+        <option>Otra cosa</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="proceso">Contame brevemente qué proceso querés convertir en sistema</label>
+      <textarea id="proceso" name="proceso" placeholder="Qué se hace hoy, quién lo hace, qué te gustaría que pasara..." required></textarea>
+    </div>
+    <div class="form-submit">
+      <button type="submit" class="btn btn-primary">
+        Enviar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </form>
+
+  <div style="margin-top:32px;font-size:14px;color:var(--muted);">
+    o escribime directo a
+    <a href="mailto:manuelpope@gmail.com" style="color:var(--accent);text-decoration:none;font-weight:500;">manuelpope@gmail.com</a>
+    ·
+    <a href="https://www.linkedin.com/in/manuel-andres-tobon-bayona-een/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-weight:500;">LinkedIn</a>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="container">
+    Manuel Andrés Tobón Bayona · Buenos Aires, Argentina · <a href="mailto:manuelpope@gmail.com">manuelpope@gmail.com</a>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted-soft);">Construido con HTML, CSS y dos SVGs. Sin CDN. Funciona offline.</div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var KEY = 'landing-theme';
+  var root = document.documentElement;
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch(e) {}
+  if (saved === 'dark') root.setAttribute('data-theme', 'dark');
+  var btn = document.getElementById('theme-toggle');
+  btn.addEventListener('click', function() {
+    var isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      root.removeAttribute('data-theme');
+      try { localStorage.removeItem(KEY); } catch(e) {}
+    } else {
+      root.setAttribute('data-theme', 'dark');
+      try { localStorage.setItem(KEY, 'dark'); } catch(e) {}
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
